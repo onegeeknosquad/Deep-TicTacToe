@@ -6,12 +6,14 @@ Created on Tue Jun 19 14:07:39 2018
 @author: mrpotatohead
 """
 import numpy as np
+from Player import Player
+
 
 class TTT:
-    def __init__(self):
+    def __init__(self, p1, p2):
         self.board = ["-"] * 9
-        self.player1 = "X"
-        self.player2 = "O"
+        self.player1 = p1
+        self.player2 = p2
         self.player_list = [self.player1,self. player2]
         self.current_player = 0
       
@@ -46,13 +48,14 @@ class TTT:
         
     def make_move(self, square, player):
         if self.board[square-1] == '-':
-            self.board[square-1] = self.player_list[self.current_player]
+            self.board[square-1] = self.player_list[self.current_player].symbol
             self.switch_player()
         else:
             return -3
         
-    def select_move(self, human=True):
-        if human:
+    def select_move(self):
+        player = self.player_list[self.current_player]
+        if player.human:
             move = input("Select a square: ")
             return int(move)
         else:
@@ -90,7 +93,7 @@ class TTT:
         while winner not in [1,-1,-2]:
             if verbose:
                 self.print_board()
-            move = self.select_move(False)
+            move = self.select_move()
             new_state = self.make_move(move, self.current_player)
             if new_state == -3:
                 return new_state
@@ -99,8 +102,11 @@ class TTT:
             self.print_board()
         self.switch_player()
         return winner
-            
+     
+        
+p1 = Player(True,"X")
+p2 = Player(False,"O")
     
-T = TTT()
+T = TTT(p1,p2)
 
 print(T.play_game())
